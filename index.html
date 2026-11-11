@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMA DE REPORTES - EL BOTALÓN</title>
+  <!-- SDK DE TELEGRAM WEBAPP -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="header">
+      <img src="botalon-logo.png" alt="EL BOTALÓN LOGO" class="brand-logo" onerror="this.style.display='none'">
+      <h2>🌾 GRUPO BOTALÓN</h2>
+      <p>SISTEMA INTEGRADO DE CONTROL Y REPORTES</p>
+    </div>
+
+    <form id="reporteForm">
+      <!-- SELECTOR DINÁMICO DE MÓDULO -->
+      <div class="modulo-selector-card">
+        <label for="tipo_reporte">📋 SELECCIONE EL TIPO DE REPORTE:</label>
+        <select id="tipo_reporte" class="modulo-select" onchange="cambiarModulo()">
+          <option value="CONTROL_HOJAS" selected>📄 CONTROL DE HOJAS DESPACHADAS</option>
+          <option value="TRASLADOS_ENVIOS">🚚 TRASLADOS Y ENVÍOS</option>
+          <option value="REPORTE_SOPORTE">🛠️ REPORTE DIARIO DE ACTIVIDADES (SOPORTE)</option>
+          <option value="INCIDENCIAS">⚠️ REPORTE DE INCIDENCIAS</option>
+          <option value="INVENTARIO">📦 CONTROL DE INVENTARIO</option>
+        </select>
+        <div class="tipo-badge-container">
+          <span id="moduloBadge" class="tipo-badge badge-hojas">📄 CONTROL DE HOJAS</span>
+        </div>
+      </div>
+
+      <!-- DATOS GENERALES COMUNES (SIN REQUIRED) -->
+      <div class="card-section">
+        <p class="section-title">👤 DATOS GENERALES</p>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="fecha">FECHA Y HORA</label>
+            <input type="datetime-local" id="fecha">
+          </div>
+          <div class="form-group flex-1">
+            <label for="responsable">RESPONSABLE / REGISTRADO POR</label>
+            <select id="responsable">
+              <option value="JESUS PICHARDO" selected>JESUS PICHARDO</option>
+              <option value="JUAN GARCIA">JUAN GARCIA</option>
+              <option value="OTRO">OTRO (ESPECIFICAR)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" id="group_responsable_otro" style="display: none;">
+          <label for="responsable_otro">ESPECIFIQUE EL NOMBRE DEL RESPONSABLE</label>
+          <input type="text" id="responsable_otro" placeholder="NOMBRE Y APELLIDO">
+        </div>
+
+        <div class="form-group">
+          <label for="sede">SEDE / SUCURSAL</label>
+          <input type="text" id="sede" placeholder="EJ: SEDE CENTRAL / OFICINA ARAURE" value="ARAURE">
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 1. SECCIÓN: CONTROL DE HOJAS               -->
+      <!-- ========================================== -->
+      <div id="seccion_hojas" class="card-section active-section">
+        <p class="section-title">📄 DESPACHO Y CONTROL DE HOJAS</p>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="hojas_area">ÁREA / GALPÓN DESTINO</label>
+            <select id="hojas_area">
+              <option value="">SELECCIONE GALPÓN...</option>
+              <option value="GALPÓN 1">GALPÓN 1</option>
+              <option value="GALPÓN 2">GALPÓN 2</option>
+              <option value="GALPÓN 3">GALPÓN 3</option>
+              <option value="GALPÓN 4">GALPÓN 4</option>
+              <option value="GALPÓN 5">GALPÓN 5</option>
+              <option value="GALPÓN 6">GALPÓN 6</option>
+              <option value="GALPÓN 7">GALPÓN 7</option>
+              <option value="GALPÓN 8">GALPÓN 8</option>
+              <option value="GALPÓN 9">GALPÓN 9</option>
+              <option value="GALPÓN 10">GALPÓN 10</option>
+              <option value="GALPÓN 11">GALPÓN 11</option>
+              <option value="GALPÓN 12">GALPÓN 12</option>
+              <option value="GALPÓN 13">GALPÓN 13</option>
+              <option value="GALPÓN 14">GALPÓN 14</option>
+              <option value="GALPÓN 15">GALPÓN 15</option>
+              <option value="OTRO">OTRA ÁREA (ESPECIFICAR)</option>
+            </select>
+          </div>
+          <div class="form-group flex-1" id="group_hojas_otra_area" style="display: none;">
+            <label for="hojas_area_otra">ESPECIFIQUE EL ÁREA</label>
+            <input type="text" id="hojas_area_otra" placeholder="NOMBRE DEL ÁREA U OFICINA">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="hojas_tipo">TIPO DE HOJA / FORMATO</label>
+            <select id="hojas_tipo">
+              <option value="HOJA BLANCA CARTA">HOJA BLANCA TAMAÑO CARTA</option>
+              <option value="HOJA BLANCA OFICIO">HOJA BLANCA TAMAÑO OFICIO</option>
+              <option value="FORMATO DE FACTURA">FORMATO DE FACTURACIÓN</option>
+              <option value="FORMATO DE DESPACHO">FORMATO DE DESPACHO</option>
+              <option value="HOJAS MEMBRETADAS">HOJAS MEMBRETADAS</option>
+              <option value="OTRO FORMATO">OTRO FORMATO</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="hojas_unidad">UNIDAD DE MEDIDA</label>
+            <select id="hojas_unidad">
+              <option value="RESMAS">RESMA(S)</option>
+              <option value="HOJAS SUELTAS">HOJAS SUELTAS</option>
+              <option value="PAQUETES">PAQUETE(S)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="hojas_cantidad">CANTIDAD DESPACHADA</label>
+            <div class="stepper-wrapper">
+              <button type="button" class="btn-stepper" onclick="modificarStepper('hojas_cantidad', -1)">-</button>
+              <input type="number" id="hojas_cantidad" value="1" min="1">
+              <button type="button" class="btn-stepper" onclick="modificarStepper('hojas_cantidad', 1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
+        <div class="form-group">
+          <label for="hojas_nota">NOTA / DESCRIPCIÓN DEL DESPACHO</label>
+          <textarea id="hojas_nota" rows="2"
+            placeholder="DESCRIPCIÓN O DETALLE SOBRE EL DESPACHO DE HOJAS..."></textarea>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 2. SECCIÓN: TRASLADOS Y ENVÍOS             -->
+      <!-- ========================================== -->
+      <div id="seccion_traslados" class="card-section" style="display: none;">
+        <p class="section-title">🚚 DATOS DEL TRASLADO O ENVÍO</p>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="traslado_tipo">TIPO DE MOVIMIENTO</label>
+            <select id="traslado_tipo">
+              <option value="TRASLADO INTERNO">TRASLADO INTERNO (ENTRE GALPONES / SEDES)</option>
+              <option value="ENVÍO POR ENCOMIENDA">ENVÍO POR ENCOMIENDA / COURIER</option>
+              <option value="ENTREGA A PROVEEDOR O CLIENTE">ENTREGA A PROVEEDOR O CLIENTE</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="traslado_guia">N° GUÍA / REMISIÓN / CONTROL</label>
+            <input type="text" id="traslado_guia" placeholder="EJ: GUIA-9042">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="traslado_origen">ORIGEN (GALPÓN / SEDE)</label>
+            <input type="text" id="traslado_origen" placeholder="EJ: GALPÓN 3 / ALMACÉN PRINCIPAL">
+          </div>
+          <div class="form-group flex-1">
+            <label for="traslado_destino">DESTINO (GALPÓN / SEDE)</label>
+            <input type="text" id="traslado_destino" placeholder="EJ: GALPÓN 8 / SUCURSAL CENTRO">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="traslado_descripcion">DESCRIPCIÓN DE ARTÍCULOS / EQUIPOS TRASLADADOS</label>
+          <textarea id="traslado_descripcion" placeholder="INDICAR QUÉ SE TRASLADA, CANTIDADES, MARCAS..."></textarea>
+        </div>
+
+        <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
+        <div class="form-group">
+          <label for="traslado_nota">NOTA / OBSERVACIÓN DEL TRASLADO</label>
+          <textarea id="traslado_nota" rows="2" placeholder="OBSERVACIONES O DETALLES DEL TRASLADO..."></textarea>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 3. SECCIÓN: REPORTE DIARIO DE SOPORTE      -->
+      <!-- ========================================== -->
+      <div id="seccion_soporte" class="card-section" style="display: none;">
+        <p class="section-title">🛠️ REPORTE DIARIO DE ACTIVIDADES DE SOPORTE</p>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="soporte_turno">TURNO / JORNADA</label>
+            <select id="soporte_turno">
+              <option value="JORNADA COMPLETA">JORNADA COMPLETA</option>
+              <option value="TURNO MAÑANA">TURNO MAÑANA</option>
+              <option value="TURNO TARDE">TURNO TARDE</option>
+              <option value="GUARDIA / FIN DE SEMANA">GUARDIA / FIN DE SEMANA</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="soporte_estado_sistemas">ESTADO GENERAL DE SISTEMAS / RED</label>
+            <select id="soporte_estado_sistemas">
+              <option value="100% OPERATIVO SIN NOVEDADES">🟢 100% OPERATIVO SIN NOVEDADES</option>
+              <option value="OPERATIVO CON NOVEDADES MENORES">🟡 OPERATIVO CON NOVEDADES MENORES</option>
+              <option value="EN MANTENIMIENTO PROGRAMADO">🟠 EN MANTENIMIENTO PROGRAMADO</option>
+              <option value="CON FALLA O SERVICIO DEGRADADO">🔴 CON FALLA O SERVICIO DEGRADADO</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="soporte_actividades">ACTIVIDADES Y LABORES REALIZADAS</label>
+          <textarea id="soporte_actividades" rows="4"
+            placeholder="1. MANTENIMIENTO PREVENTIVO A EQUIPOS EN GALPÓN 2...&#10;2. REVISIÓN DE CABLEADO EN GALPÓN 5...&#10;3. CONFIGURACIÓN DE SWITCH..."></textarea>
+        </div>
+
+        <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
+        <div class="form-group">
+          <label for="soporte_nota">NOTA / DESCRIPCIÓN DE LA JORNADA</label>
+          <textarea id="soporte_nota" rows="2"
+            placeholder="OBSERVACIONES O DETALLES ADICIONALES DE SOPORTE..."></textarea>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 4. SECCIÓN: INCIDENCIAS                    -->
+      <!-- ========================================== -->
+      <div id="seccion_incidencias" class="card-section" style="display: none;">
+        <p class="section-title">⚠️ REPORTE DE INCIDENCIAS Y AVERÍAS</p>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="incidencia_prioridad">NIVEL DE PRIORIDAD</label>
+            <select id="incidencia_prioridad">
+              <option value="BAJA">🟢 BAJA (NO AFECTA OPERATIVIDAD)</option>
+              <option value="MEDIA" selected>🟡 MEDIA (AFECTA PARCIALMENTE)</option>
+              <option value="ALTA">🟠 ALTA (AFECTA OPERACIONES CLAVE)</option>
+              <option value="CRÍTICA">🔴 CRÍTICA (SISTEMA O ÁREA DETENIDA)</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="incidencia_categoria">TIPO DE INCIDENCIA</label>
+            <select id="incidencia_categoria">
+              <option value="RED / INTERNET / WI-FI">RED / INTERNET / WI-FI</option>
+              <option value="COMPUTADOR / SERVIDOR / LAPTOP">COMPUTADOR / SERVIDOR / LAPTOP</option>
+              <option value="IMPRESORA / ESCÁNER">IMPRESORA / ESCÁNER</option>
+              <option value="SOFTWARE / SISTEMA / CORREO">SOFTWARE / SISTEMA / CORREO</option>
+              <option value="ELÉCTRICO / UPS / PLANTA">ELÉCTRICO / UPS / PLANTA</option>
+              <option value="OTRA INCIDENCIA">OTRA INCIDENCIA</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="incidencia_area">GALPÓN / ÁREA AFECTADA</label>
+            <select id="incidencia_area">
+              <option value="">SELECCIONE GALPÓN...</option>
+              <option value="GALPÓN 1">GALPÓN 1</option>
+              <option value="GALPÓN 2">GALPÓN 2</option>
+              <option value="GALPÓN 3">GALPÓN 3</option>
+              <option value="GALPÓN 4">GALPÓN 4</option>
+              <option value="GALPÓN 5">GALPÓN 5</option>
+              <option value="GALPÓN 6">GALPÓN 6</option>
+              <option value="GALPÓN 7">GALPÓN 7</option>
+              <option value="GALPÓN 8">GALPÓN 8</option>
+              <option value="GALPÓN 9">GALPÓN 9</option>
+              <option value="GALPÓN 10">GALPÓN 10</option>
+              <option value="GALPÓN 11">GALPÓN 11</option>
+              <option value="GALPÓN 12">GALPÓN 12</option>
+              <option value="GALPÓN 13">GALPÓN 13</option>
+              <option value="GALPÓN 14">GALPÓN 14</option>
+              <option value="GALPÓN 15">GALPÓN 15</option>
+              <option value="OTRO">OTRA ÁREA</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="incidencia_estado">ESTADO DE LA INCIDENCIA</label>
+            <select id="incidencia_estado">
+              <option value="ABIERTA / EN PROCESO">⏳ ABIERTA / EN PROCESO</option>
+              <option value="RESUELTA / SOLUCIONADA">✅ RESUELTA / SOLUCIONADA</option>
+              <option value="EN ESPERA DE REPUESTO">🕒 EN ESPERA DE REPUESTO</option>
+              <option value="ESCALADA A TERCEROS">🚨 ESCALADA A TERCEROS / GARANTÍA</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="incidencia_descripcion">DESCRIPCIÓN DETALLADA DEL PROBLEMA</label>
+          <textarea id="incidencia_descripcion" rows="3"
+            placeholder="INDICAR QUÉ OCURRIÓ, MENSAJES DE ERROR, SÍNTOMAS..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="incidencia_solucion">ACCIÓN REALIZADA / SOLUCIÓN APLICADA</label>
+          <textarea id="incidencia_solucion" rows="2"
+            placeholder="INDICAR SI SE APLICÓ ALGUNA SOLUCIÓN O ACCIÓN INMEDIATA..."></textarea>
+        </div>
+
+        <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
+        <div class="form-group">
+          <label for="incidencia_nota">NOTA / OBSERVACIÓN ADICIONAL</label>
+          <textarea id="incidencia_nota" rows="2"
+            placeholder="DETALLES O NOTAS ADICIONALES DE LA INCIDENCIA..."></textarea>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- 5. SECCIÓN: INVENTARIO                     -->
+      <!-- ========================================== -->
+      <div id="seccion_inventario" class="card-section" style="display: none;">
+        <p class="section-title">📦 MOVIMIENTO DE INVENTARIO</p>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="inv_tipo_mov">TIPO DE MOVIMIENTO</label>
+            <select id="inv_tipo_mov">
+              <option value="ENTRADA / RECEPCIÓN">📥 ENTRADA / RECEPCIÓN DE STOCK</option>
+              <option value="SALIDA / DESPACHO">📤 SALIDA / DESPACHO / ENTREGA</option>
+              <option value="DEVOLUCIÓN / REINGRESO">🔄 DEVOLUCIÓN / REINGRESO</option>
+              <option value="AJUSTE DE INVENTARIO">⚙️ AJUSTE DE INVENTARIO / CONTEO</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="inv_categoria">CATEGORÍA</label>
+            <select id="inv_categoria">
+              <option value="PAPELERÍA Y ÚTILES">PAPELERÍA Y ÚTILES</option>
+              <option value="EQUIPOS DE CÓMPUTO">EQUIPOS DE CÓMPUTO</option>
+              <option value="REDES Y CONECTIVIDAD">REDES Y CONECTIVIDAD</option>
+              <option value="TÓNER Y TINTAS">TÓNER Y TINTAS</option>
+              <option value="HERRAMIENTAS Y REPUESTOS">HERRAMIENTAS Y REPUESTOS</option>
+              <option value="VARIOS / OTROS">VARIOS / OTROS</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label for="inv_articulo">ARTÍCULO / MATERIAL / EQUIPO</label>
+            <input type="text" id="inv_articulo" placeholder="EJ: TECLADO USB LOGITECH / TÓNER HP 85A">
+          </div>
+          <div class="form-group flex-1">
+            <label for="inv_cantidad">CANTIDAD</label>
+            <div class="stepper-wrapper">
+              <button type="button" class="btn-stepper" onclick="modificarStepper('inv_cantidad', -1)">-</button>
+              <input type="number" id="inv_cantidad" value="1" min="1">
+              <button type="button" class="btn-stepper" onclick="modificarStepper('inv_cantidad', 1)">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="inv_ubicacion">UBICACIÓN / GALPÓN / ALMACÉN</label>
+            <select id="inv_ubicacion">
+              <option value="">SELECCIONE GALPÓN / ALMACÉN...</option>
+              <option value="GALPÓN 1">GALPÓN 1</option>
+              <option value="GALPÓN 2">GALPÓN 2</option>
+              <option value="GALPÓN 3">GALPÓN 3</option>
+              <option value="GALPÓN 4">GALPÓN 4</option>
+              <option value="GALPÓN 5">GALPÓN 5</option>
+              <option value="GALPÓN 6">GALPÓN 6</option>
+              <option value="GALPÓN 7">GALPÓN 7</option>
+              <option value="GALPÓN 8">GALPÓN 8</option>
+              <option value="GALPÓN 9">GALPÓN 9</option>
+              <option value="GALPÓN 10">GALPÓN 10</option>
+              <option value="GALPÓN 11">GALPÓN 11</option>
+              <option value="GALPÓN 12">GALPÓN 12</option>
+              <option value="GALPÓN 13">GALPÓN 13</option>
+              <option value="GALPÓN 14">GALPÓN 14</option>
+              <option value="GALPÓN 15">GALPÓN 15</option>
+              <option value="ALMACÉN GENERAL">ALMACÉN GENERAL</option>
+              <option value="OTRA UBICACIÓN">OTRA UBICACIÓN</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="inv_motivo">MOTIVO / USO</label>
+            <input type="text" id="inv_motivo" placeholder="EJ: RENOVACIÓN / COMPRA NUEVA">
+          </div>
+        </div>
+
+        <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
+        <div class="form-group">
+          <label for="inv_nota">NOTA / DESCRIPCIÓN DE INVENTARIO</label>
+          <textarea id="inv_nota" rows="2" placeholder="OBSERVACIONES O DETALLES DEL MOVIMIENTO..."></textarea>
+        </div>
+      </div>
+
+      <!-- OBSERVACIONES GENERALES COMUNES -->
+
+      <!-- EVIDENCIA FOTOGRÁFICA -->
+      <div class="card-section photo-card">
+        <p class="section-title">📷 EVIDENCIA FOTOGRÁFICA (OPCIONAL, MÁX. 10 FOTOS)</p>
+        <div class="photo-upload-container">
+          <button type="button" class="btn-photo" onclick="document.getElementById('fileInput').click()">
+            📂 ADJUNTAR O TOMAR FOTO
+          </button>
+          <input type="file" id="fileInput" multiple accept="image/*" style="display: none;"
+            onchange="handleFileSelect(event)">
+        </div>
+        <div class="photo-preview-grid" id="previewContainer"></div>
+      </div>
+
+      <!-- VISTA PREVIA DE TEXTO PARA TELEGRAM -->
+      <div class="preview-box">
+        <div class="preview-header">
+          <span>👁️ MENSAJE A ENVIAR POR TELEGRAM</span>
+          <button type="button" class="btn-copy" id="btnCopy" onclick="copiarTextoPreview()">COPIAR</button>
+        </div>
+        <textarea id="reporteOutput" rows="9" readonly></textarea>
+      </div>
+
+      <!-- BOTÓN DE ENVÍO -->
+      <button type="submit" id="btnSubmit" class="btn-submit">🚀 ENVIAR REPORTE</button>
+    </form>
+
+    <div id="statusMsg" class="status-msg"></div>
+  </div>
+
+  <script>
+    // ⚠️ PEGAR AQUÍ LA URL DE EJECUCIÓN DE TU GOOGLE APPS SCRIPT IMPLEMENTADO
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZr32Rwdn5f-ePOeNHOJKlDaGinxD1KEVFGlzj8FcC_lrq2KK6dbD1ttjgQBxfVjblEQ/exec";
+
+    let fotosLista = [];
+
+    function setFechaActual() {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      document.getElementById('fecha').value = now.toISOString().slice(0, 16);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setFechaActual();
+
+      if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.expand();
+      }
+
+      // EVENTO PARA RESPONSABLE "OTRO"
+      const selResp = document.getElementById("responsable");
+      if (selResp) {
+        selResp.addEventListener("change", function () {
+          const groupOtro = document.getElementById("group_responsable_otro");
+          if (this.value === "OTRO") {
+            groupOtro.style.display = "block";
+          } else {
+            groupOtro.style.display = "none";
+          }
+          actualizarPreviewTexto();
+        });
+      }
+
+      // EVENTO PARA ÁREA "OTRA" EN CONTROL DE HOJAS
+      const selAreaHojas = document.getElementById("hojas_area");
+      if (selAreaHojas) {
+        selAreaHojas.addEventListener("change", function () {
+          const groupOtra = document.getElementById("group_hojas_otra_area");
+          if (this.value === "OTRO") {
+            groupOtra.style.display = "block";
+          } else {
+            groupOtra.style.display = "none";
+          }
+          actualizarPreviewTexto();
+        });
+      }
+
+      cambiarModulo();
+
+      document.querySelectorAll('#reporteForm input, #reporteForm select, #reporteForm textarea').forEach(el => {
+        el.addEventListener('input', actualizarPreviewTexto);
+        el.addEventListener('change', actualizarPreviewTexto);
+      });
+    });
+
+    function cambiarModulo() {
+      const modulo = document.getElementById("tipo_reporte").value;
+      const badge = document.getElementById("moduloBadge");
+
+      const secciones = {
+        "CONTROL_HOJAS": { id: "seccion_hojas", texto: "📄 CONTROL DE HOJAS", clase: "badge-hojas" },
+        "TRASLADOS_ENVIOS": { id: "seccion_traslados", texto: "🚚 TRASLADOS Y ENVÍOS", clase: "badge-traslados" },
+        "REPORTE_SOPORTE": { id: "seccion_soporte", texto: "🛠️ REPORTE SOPORTE", clase: "badge-soporte" },
+        "INCIDENCIAS": { id: "seccion_incidencias", texto: "⚠️ INCIDENCIAS", clase: "badge-incidencias" },
+        "INVENTARIO": { id: "seccion_inventario", texto: "📦 INVENTARIO", clase: "badge-inventario" }
+      };
+
+      // OCULTAR TODAS LAS SECCIONES
+      Object.keys(secciones).forEach(key => {
+        const sec = document.getElementById(secciones[key].id);
+        if (sec) {
+          sec.style.display = "none";
+          sec.classList.remove("active-section");
+        }
+      });
+
+      // MOSTRAR LA SECCIÓN ACTIVA
+      const actual = secciones[modulo] || secciones["CONTROL_HOJAS"];
+      const secActual = document.getElementById(actual.id);
+      if (secActual) {
+        secActual.style.display = "block";
+        secActual.classList.add("active-section");
+      }
+
+      // ACTUALIZAR BADGE
+      badge.className = "tipo-badge " + actual.clase;
+      badge.textContent = actual.texto;
+
+      actualizarPreviewTexto();
+    }
+
+    function modificarStepper(id, delta) {
+      const input = document.getElementById(id);
+      let val = parseInt(input.value) || 0;
+      val = Math.max(1, val + delta);
+      input.value = val;
+      actualizarPreviewTexto();
+    }
+
+    // COMPRIME FOTOS ANTES DE ENVIAR
+    function comprimirImagen(file, maxDimension = 1280, quality = 0.75) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("ERROR LEYENDO ARCHIVO: " + file.name));
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onerror = () => reject(new Error("ARCHIVO INVÁLIDO: " + file.name));
+          img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              } else {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            const base64 = dataUrl.split(',')[1];
+            resolve({
+              id: 'foto_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+              name: (file.name || "foto").replace(/\.[^/.]+$/, "").toUpperCase() + ".JPG",
+              mimeType: "image/jpeg",
+              base64: base64,
+              previewUrl: dataUrl
+            });
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleFileSelect(event) {
+      const files = Array.from(event.target.files || []);
+      event.target.value = '';
+
+      if (files.length === 0) return;
+
+      if (fotosLista.length + files.length > 10) {
+        alert("PUEDES ADJUNTAR UN MÁXIMO DE 10 FOTOS.");
+        return;
+      }
+
+      for (const file of files) {
+        try {
+          const fotoComp = await comprimirImagen(file);
+          fotosLista.push(fotoComp);
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+
+      renderizarPreviews();
+    }
+
+    function renderizarPreviews() {
+      const container = document.getElementById("previewContainer");
+      container.innerHTML = "";
+
+      fotosLista.forEach(foto => {
+        const thumbDiv = document.createElement('div');
+        thumbDiv.className = 'photo-preview-item';
+        thumbDiv.innerHTML = `
+          <img src="${foto.previewUrl}" alt="PREVIEW">
+          <button type="button" class="btn-remove-photo" onclick="eliminarFoto('${foto.id}')" title="ELIMINAR">✕</button>
+        `;
+        container.appendChild(thumbDiv);
+      });
+    }
+
+    function eliminarFoto(id) {
+      fotosLista = fotosLista.filter(f => f.id !== id);
+      renderizarPreviews();
+    }
+
+    // FUNCIÓN SEGURA PARA OBTENER VALORES DEL DOM SIN ERRORES
+    function getVal(id, def = "") {
+      const el = document.getElementById(id);
+      if (!el) return def;
+      return (el.value || def).trim();
+    }
+
+    // GENERADOR DINÁMICO DE TEXTO DE VISTA PREVIA
+    function actualizarPreviewTexto() {
+      const modulo = getVal("tipo_reporte", "CONTROL_HOJAS");
+      const fecha = getVal("fecha").replace("T", " ");
+
+      let responsable = getVal("responsable", "JESUS PICHARDO").toUpperCase();
+      if (responsable === "OTRO") {
+        responsable = getVal("responsable_otro", "OTRO").toUpperCase();
+      }
+
+      const sede = getVal("sede", "EL BOTALÓN").toUpperCase();
+
+      let cuerpo = "";
+      let titulo = "";
+      let tags = ["#GRUPO_BOTALON"];
+      let nota = "";
+
+      if (modulo === "CONTROL_HOJAS") {
+        titulo = "📄 CONTROL DE HOJAS DESPACHADAS";
+        tags.push("#CONTROL_HOJAS", "#PAPELERIA");
+
+        let area = getVal("hojas_area", "N/A").toUpperCase();
+        if (area === "OTRO") {
+          area = getVal("hojas_area_otra", "OTRA ÁREA").toUpperCase();
+        }
+
+        const tipoHoja = getVal("hojas_tipo", "HOJA BLANCA CARTA").toUpperCase();
+        const unidad = getVal("hojas_unidad", "RESMAS").toUpperCase();
+        const cant = getVal("hojas_cantidad", "1");
+        nota = getVal("hojas_nota").toUpperCase();
+
+        cuerpo =
+          `🏢 GALPÓN / DESTINO: ${area}
+📦 TIPO DE FORMATO: ${tipoHoja}
+🔢 CANTIDAD: ${cant} (${unidad})`;
+
+      } else if (modulo === "TRASLADOS_ENVIOS") {
+        titulo = "🚚 REPORTE DE TRASLADO / ENVÍO";
+        tags.push("#TRASLADOS", "#LOGISTICA");
+
+        const tipo = getVal("traslado_tipo", "TRASLADO INTERNO").toUpperCase();
+        const guia = getVal("traslado_guia", "S/G").toUpperCase();
+        const origen = getVal("traslado_origen", "N/A").toUpperCase();
+        const destino = getVal("traslado_destino", "N/A").toUpperCase();
+        const desc = getVal("traslado_descripcion", "N/A").toUpperCase();
+        nota = getVal("traslado_nota").toUpperCase();
+
+        cuerpo =
+          `📋 TIPO MOVIMIENTO: ${tipo}
+🏷️ N° GUÍA/CONTROL: ${guia}
+📍 ORIGEN: ${origen}
+🎯 DESTINO: ${destino}
+📦 DESCRIPCIÓN:
+${desc}`;
+
+      } else if (modulo === "REPORTE_SOPORTE") {
+        titulo = "🛠️ REPORTE DIARIO DE ACTIVIDADES DE SOPORTE";
+        tags.push("#SOPORTE_TECNICO", "#ACTIVIDADES_DIARIAS");
+
+        const turno = getVal("soporte_turno", "JORNADA COMPLETA").toUpperCase();
+        const estadoSis = getVal("soporte_estado_sistemas", "100% OPERATIVO").toUpperCase();
+        const acts = getVal("soporte_actividades", "N/A").toUpperCase();
+        nota = getVal("soporte_nota").toUpperCase();
+
+        cuerpo =
+          `⏰ TURNO: ${turno}
+📡 ESTADO DE SISTEMAS: ${estadoSis}
+
+📋 ACTIVIDADES REALIZADAS:
+${acts}`;
+
+      } else if (modulo === "INCIDENCIAS") {
+        titulo = "⚠️ REPORTE DE INCIDENCIA";
+        tags.push("#INCIDENCIAS", "#SOPORTE");
+
+        const prioridad = getVal("incidencia_prioridad", "MEDIA").toUpperCase();
+        const cat = getVal("incidencia_categoria", "GENERAL").toUpperCase();
+        const areaAfec = getVal("incidencia_area", "N/A").toUpperCase();
+        const estadoInc = getVal("incidencia_estado", "EN PROCESO").toUpperCase();
+        const desc = getVal("incidencia_descripcion", "N/A").toUpperCase();
+        const solucion = getVal("incidencia_solucion", "EN DIAGNÓSTICO").toUpperCase();
+        nota = getVal("incidencia_nota").toUpperCase();
+
+        cuerpo =
+          `🚨 PRIORIDAD: ${prioridad}
+📁 CATEGORÍA: ${cat}
+🏢 GALPÓN / AFECTADO: ${areaAfec}
+📊 ESTADO: ${estadoInc}
+
+🔍 DESCRIPCIÓN DEL PROBLEMA:
+${desc}
+
+🔧 SOLUCIÓN / ACCIÓN TOMADA:
+${solucion}`;
+
+      } else if (modulo === "INVENTARIO") {
+        titulo = "📦 MOVIMIENTO DE INVENTARIO";
+        tags.push("#INVENTARIO", "#STOCK");
+
+        const tipoMov = getVal("inv_tipo_mov", "ENTRADA").toUpperCase();
+        const cat = getVal("inv_categoria", "VARIOS").toUpperCase();
+        const art = getVal("inv_articulo", "N/A").toUpperCase();
+        const cant = getVal("inv_cantidad", "1");
+        const ubicacion = getVal("inv_ubicacion", "N/A").toUpperCase();
+        const motivo = getVal("inv_motivo", "N/A").toUpperCase();
+        nota = getVal("inv_nota").toUpperCase();
+
+        cuerpo =
+          `🔄 TIPO MOVIMIENTO: ${tipoMov}
+📂 CATEGORÍA: ${cat}
+🏷️ ARTÍCULO: ${art}
+🔢 CANTIDAD: ${cant}
+📍 UBICACIÓN / GALPÓN: ${ubicacion}
+📝 MOTIVO: ${motivo}`;
+      }
+
+      let notaStr = "";
+      if (nota) {
+        notaStr = `\n\n📝 NOTA / DESCRIPCIÓN:\n${nota}`;
+      }
+
+      const textoFinal =
+        `🌾 [${titulo}]
+🏢 SEDE: ${sede}
+──────────────────────────────
+📅 FECHA/HORA: ${fecha || "N/A"}
+👤 REGISTRADO POR: ${responsable}
+──────────────────────────────
+${cuerpo}${notaStr}
+──────────────────────────────
+${tags.join(" ")}`;
+
+      const outputEl = document.getElementById("reporteOutput");
+      if (outputEl) {
+        outputEl.value = textoFinal;
+      }
+    }
+
+    function copiarTextoPreview() {
+      const textarea = document.getElementById("reporteOutput");
+      textarea.select();
+      textarea.setSelectionRange(0, 99999);
+      const btn = document.getElementById("btnCopy");
+
+      const marcarCopiado = () => {
+        btn.textContent = "¡COPIADO!";
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.textContent = "COPIAR";
+          btn.classList.remove("copied");
+        }, 2000);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textarea.value).then(marcarCopiado).catch(marcarCopiado);
+      } else {
+        document.execCommand("copy");
+        marcarCopiado();
+      }
+    }
+
+    // ENVÍO DEL FORMULARIO A GOOGLE APPS SCRIPT
+    document.getElementById("reporteForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const btn = document.getElementById("btnSubmit");
+      const status = document.getElementById("statusMsg");
+
+      btn.disabled = true;
+      btn.textContent = "⏳ ENVIANDO REPORTE...";
+      status.style.display = "none";
+
+      const modulo = getVal("tipo_reporte", "CONTROL_HOJAS");
+
+      let areaHojas = getVal("hojas_area", "N/A").toUpperCase();
+      if (areaHojas === "OTRO") {
+        areaHojas = getVal("hojas_area_otra", "OTRA ÁREA").toUpperCase();
+      }
+
+      let respVal = getVal("responsable", "JESUS PICHARDO").toUpperCase();
+      if (respVal === "OTRO") {
+        respVal = getVal("responsable_otro", "OTRO").toUpperCase();
+      }
+
+      const payload = {
+        tipo_reporte: modulo,
+        fecha: getVal("fecha"),
+        responsable: respVal,
+        sede: getVal("sede", "EL BOTALÓN").toUpperCase(),
+
+        // CONTROL DE HOJAS
+        hojas_area: areaHojas,
+        hojas_tipo: getVal("hojas_tipo", "HOJA BLANCA CARTA").toUpperCase(),
+        hojas_unidad: getVal("hojas_unidad", "RESMAS").toUpperCase(),
+        hojas_cantidad: getVal("hojas_cantidad", "1"),
+        hojas_nota: getVal("hojas_nota").toUpperCase(),
+
+        // TRASLADOS Y ENVÍOS
+        traslado_tipo: getVal("traslado_tipo", "TRASLADO INTERNO").toUpperCase(),
+        traslado_guia: getVal("traslado_guia", "S/G").toUpperCase(),
+        traslado_origen: getVal("traslado_origen", "N/A").toUpperCase(),
+        traslado_destino: getVal("traslado_destino", "N/A").toUpperCase(),
+        traslado_descripcion: getVal("traslado_descripcion", "N/A").toUpperCase(),
+        traslado_nota: getVal("traslado_nota").toUpperCase(),
+
+        // SOPORTE
+        soporte_turno: getVal("soporte_turno", "JORNADA COMPLETA").toUpperCase(),
+        soporte_estado_sistemas: getVal("soporte_estado_sistemas", "100% OPERATIVO").toUpperCase(),
+        soporte_actividades: getVal("soporte_actividades", "N/A").toUpperCase(),
+        soporte_nota: getVal("soporte_nota").toUpperCase(),
+
+        // INCIDENCIAS
+        incidencia_prioridad: getVal("incidencia_prioridad", "MEDIA").toUpperCase(),
+        incidencia_categoria: getVal("incidencia_categoria", "GENERAL").toUpperCase(),
+        incidencia_area: getVal("incidencia_area", "N/A").toUpperCase(),
+        incidencia_estado: getVal("incidencia_estado", "EN PROCESO").toUpperCase(),
+        incidencia_descripcion: getVal("incidencia_descripcion", "N/A").toUpperCase(),
+        incidencia_solucion: getVal("incidencia_solucion", "EN DIAGNÓSTICO").toUpperCase(),
+        incidencia_nota: getVal("incidencia_nota").toUpperCase(),
+
+        // INVENTARIO
+        inv_tipo_mov: getVal("inv_tipo_mov", "ENTRADA").toUpperCase(),
+        inv_categoria: getVal("inv_categoria", "VARIOS").toUpperCase(),
+        inv_articulo: getVal("inv_articulo", "N/A").toUpperCase(),
+        inv_cantidad: getVal("inv_cantidad", "1"),
+        inv_ubicacion: getVal("inv_ubicacion", "N/A").toUpperCase(),
+        inv_motivo: getVal("inv_motivo", "N/A").toUpperCase(),
+        inv_nota: getVal("inv_nota").toUpperCase(),
+
+        // FOTOS
+        imagenes: fotosLista.map(f => ({
+          name: f.name,
+          mimeType: f.mimeType,
+          base64: f.base64
+        }))
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(() => {
+          status.className = "status-msg status-success";
+          status.textContent = "✅ ¡REPORTE ENVIADO CORRECTAMENTE AL GRUPO Y GOOGLE SHEET!";
+          status.style.display = "block";
+
+          fotosLista = [];
+          renderizarPreviews();
+          setFechaActual();
+          actualizarPreviewTexto();
+
+          if (window.Telegram && window.Telegram.WebApp) {
+            setTimeout(() => {
+              window.Telegram.WebApp.close();
+            }, 2500);
+          }
+        })
+        .catch((err) => {
+          status.className = "status-msg status-error";
+          status.textContent = "❌ ERROR AL ENVIAR REPORTE: " + err.message.toUpperCase();
+          status.style.display = "block";
+        })
+        .finally(() => {
+          btn.disabled = false;
+          btn.textContent = "🚀 ENVIAR REPORTE";
+        });
+    });
+  </script>
+</body>
+
+</html>
