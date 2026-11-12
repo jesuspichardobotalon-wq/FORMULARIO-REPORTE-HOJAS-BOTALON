@@ -18,6 +18,7 @@
   --badge-soporte: #059669;
   --badge-incidencias: #dc2626;
   --badge-inventario: #7c3aed;
+  --badge-asignaciones: #d97706;
 }
 
 * {
@@ -130,6 +131,7 @@ body {
 .badge-soporte { background-color: var(--badge-soporte); }
 .badge-incidencias { background-color: var(--badge-incidencias); }
 .badge-inventario { background-color: var(--badge-inventario); }
+.badge-asignaciones { background-color: var(--badge-asignaciones); }
 
 /* Filas y Grupos */
 .form-row {

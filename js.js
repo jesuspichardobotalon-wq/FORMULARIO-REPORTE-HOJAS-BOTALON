@@ -29,6 +29,11 @@ var CONFIG_DESTINOS = {
     topicId: 26,
     sheetName: "CONTROL HOJAS"
   },
+  "ASIGNACIONES": {
+    chatId: CHAT_ID_PRINCIPAL,
+    topicId: 2,
+    sheetName: "ASIGNACIONES"
+  },
   "TRASLADOS_ENVIOS": {
     chatId: CHAT_ID_PRINCIPAL,
     topicId: 41,
@@ -65,13 +70,20 @@ function doGet(e) {
 
 function doPost(e) {
   try {
-    if (!e || !e.postData || !e.postData.contents) {
+    var raw = "";
+    if (e && e.postData && e.postData.contents) {
+      raw = e.postData.contents;
+    } else if (e && e.parameter && e.parameter.data) {
+      raw = e.parameter.data;
+    }
+
+    if (!raw) {
       return createJsonResponse({ success: false, error: "Sin datos recibidos en la petición." });
     }
 
     var data;
     try {
-      data = JSON.parse(e.postData.contents);
+      data = JSON.parse(raw);
     } catch (parseErr) {
       return createJsonResponse({ success: false, error: "Formato JSON inválido." });
     }
@@ -170,6 +182,21 @@ function buildMessage(data, tipo) {
       notaModulo = "\n\n📝 <b>NOTA / DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.hojas_nota));
     }
 
+  } else if (tipo === "ASIGNACIONES") {
+    titulo = "📋 <b>[CONTROL DE ASIGNACIÓN]</b>";
+    tags += " #ASIGNACIONES #CONTROL";
+
+    cuerpo =
+      "👤 <b>ASIGNADO A / RECEPTOR:</b> " + escapeHtml(toUpperSafe(data.asig_persona || "N/A")) + "\n" +
+      "🏷️ <b>TIPO DE ASIGNACIÓN:</b> " + escapeHtml(toUpperSafe(data.asig_tipo || "N/A")) + "\n" +
+      "📊 <b>STATUS:</b> ⏳ " + escapeHtml(toUpperSafe(data.asig_status || "PENDIENTE")) + "\n" +
+      "🏢 <b>GALPÓN / UBICACIÓN:</b> " + escapeHtml(toUpperSafe(data.asig_ubicacion || "N/A")) + "\n\n" +
+      "📦 <b>DESCRIPCIÓN / DETALLE:</b>\n" + escapeHtml(toUpperSafe(data.asig_descripcion || "N/A"));
+
+    if (data.asig_nota) {
+      notaModulo = "\n\n📝 <b>NOTA / OBSERVACIÓN:</b>\n" + escapeHtml(toUpperSafe(data.asig_nota));
+    }
+
   } else if (tipo === "TRASLADOS_ENVIOS") {
     titulo = "🚚 <b>[REPORTE DE TRASLADO / ENVÍO]</b>";
     tags += " #TRASLADOS #LOGISTICA";
@@ -206,7 +233,7 @@ function buildMessage(data, tipo) {
       "🚨 <b>PRIORIDAD:</b> " + escapeHtml(toUpperSafe(data.incidencia_prioridad || "N/A")) + "\n" +
       "📁 <b>CATEGORÍA:</b> " + escapeHtml(toUpperSafe(data.incidencia_categoria || "N/A")) + "\n" +
       "🏢 <b>GALPÓN / AFECTADO:</b> " + escapeHtml(toUpperSafe(data.incidencia_area || "N/A")) + "\n" +
-      "📊 <b>ESTADO:</b> " + escapeHtml(toUpperSafe(data.incidencia_estado || "N/A")) + "\n\n" +
+      "📊 <b>ESTADO:</b> ⏳ " + escapeHtml(toUpperSafe(data.incidencia_estado || "PENDIENTE")) + "\n\n" +
       "🔍 <b>DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_descripcion || "N/A")) + "\n\n" +
       "🔧 <b>ACCIÓN / SOLUCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_solucion || "EN DIAGNÓSTICO"));
 
@@ -313,6 +340,21 @@ function registrarEnGoogleSheet(data, tipo, nombrePestana) {
       toUpperSafe(data.hojas_nota),
       data.drive_url || ""
     ];
+  } else if (tipo === "ASIGNACIONES") {
+    headers = ["MARCA TEMPORAL", "FECHA/HORA REPORTE", "REGISTRADO POR", "SEDE", "ASIGNADO A", "TIPO ASIGNACIÓN", "STATUS", "GALPÓN / UBICACIÓN", "DESCRIPCIÓN", "NOTA / OBSERVACIÓN", "FOTOS DRIVE"];
+    rowValues = [
+      fechaReg,
+      toUpperSafe(data.fecha),
+      toUpperSafe(data.responsable),
+      toUpperSafe(data.sede),
+      toUpperSafe(data.asig_persona),
+      toUpperSafe(data.asig_tipo),
+      toUpperSafe(data.asig_status || "PENDIENTE"),
+      toUpperSafe(data.asig_ubicacion),
+      toUpperSafe(data.asig_descripcion),
+      toUpperSafe(data.asig_nota),
+      data.drive_url || ""
+    ];
   } else if (tipo === "TRASLADOS_ENVIOS") {
     headers = ["MARCA TEMPORAL", "FECHA/HORA REPORTE", "REGISTRADO POR", "SEDE", "TIPO MOVIMIENTO", "N° GUÍA/CONTROL", "ORIGEN", "DESTINO", "DESCRIPCIÓN ARTÍCULOS", "NOTA / OBSERVACIÓN", "FOTOS DRIVE"];
     rowValues = [
@@ -351,7 +393,7 @@ function registrarEnGoogleSheet(data, tipo, nombrePestana) {
       toUpperSafe(data.incidencia_prioridad),
       toUpperSafe(data.incidencia_categoria),
       toUpperSafe(data.incidencia_area),
-      toUpperSafe(data.incidencia_estado),
+      toUpperSafe(data.incidencia_estado || "PENDIENTE"),
       toUpperSafe(data.incidencia_descripcion),
       toUpperSafe(data.incidencia_solucion),
       toUpperSafe(data.incidencia_nota),

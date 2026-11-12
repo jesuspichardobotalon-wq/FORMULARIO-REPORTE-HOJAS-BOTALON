@@ -25,6 +25,7 @@
         <label for="tipo_reporte">📋 SELECCIONE EL TIPO DE REPORTE:</label>
         <select id="tipo_reporte" class="modulo-select" onchange="cambiarModulo()">
           <option value="CONTROL_HOJAS" selected>📄 CONTROL DE HOJAS DESPACHADAS</option>
+          <option value="ASIGNACIONES">📋 ASIGNACIONES (EQUIPOS / TAREAS)</option>
           <option value="TRASLADOS_ENVIOS">🚚 TRASLADOS Y ENVÍOS</option>
           <option value="REPORTE_SOPORTE">🛠️ REPORTE DIARIO DE ACTIVIDADES (SOPORTE)</option>
           <option value="INCIDENCIAS">⚠️ REPORTE DE INCIDENCIAS</option>
@@ -141,6 +142,68 @@
       </div>
 
       <!-- ========================================== -->
+      <!-- SECCIÓN: ASIGNACIONES                     -->
+      <!-- ========================================== -->
+      <div id="seccion_asignaciones" class="card-section" style="display: none;">
+        <p class="section-title">📋 ASIGNACIONES (EQUIPOS / TAREAS)</p>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="asig_persona">ASIGNADO A / RECEPTOR</label>
+            <input type="text" id="asig_persona" placeholder="NOMBRE DE LA PERSONA O ÁREA">
+          </div>
+          <div class="form-group flex-1">
+            <label for="asig_tipo">TIPO DE ASIGNACIÓN</label>
+            <select id="asig_tipo">
+              <option value="EQUIPO DE COMPUTACIÓN">EQUIPO DE COMPUTACIÓN / LAPTOP</option>
+              <option value="TELEFONÍA / RADIO">TELEFONÍA / MÓVIL / RADIO</option>
+              <option value="HERRAMIENTA / UTILLAJE">HERRAMIENTA / UTILLAJE</option>
+              <option value="MATERIAL / INSUMO">MATERIAL / INSUMO</option>
+              <option value="VEHÍCULO / MAQUINARIA">VEHÍCULO / MAQUINARIA</option>
+              <option value="ACTIVIDAD / TAREA">ACTIVIDAD / TAREA ESPECÍFICA</option>
+              <option value="OTRA ASIGNACIÓN">OTRA ASIGNACIÓN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="asig_ubicacion">GALPÓN / DESTINO</label>
+          <select id="asig_ubicacion">
+            <option value="">SELECCIONE GALPÓN...</option>
+            <option value="GALPÓN 1">GALPÓN 1</option>
+            <option value="GALPÓN 2">GALPÓN 2</option>
+            <option value="GALPÓN 3">GALPÓN 3</option>
+            <option value="GALPÓN 4">GALPÓN 4</option>
+            <option value="GALPÓN 5">GALPÓN 5</option>
+            <option value="GALPÓN 6">GALPÓN 6</option>
+            <option value="GALPÓN 7">GALPÓN 7</option>
+            <option value="GALPÓN 8">GALPÓN 8</option>
+            <option value="GALPÓN 9">GALPÓN 9</option>
+            <option value="GALPÓN 10">GALPÓN 10</option>
+            <option value="GALPÓN 11">GALPÓN 11</option>
+            <option value="GALPÓN 12">GALPÓN 12</option>
+            <option value="GALPÓN 13">GALPÓN 13</option>
+            <option value="GALPÓN 14">GALPÓN 14</option>
+            <option value="GALPÓN 15">GALPÓN 15</option>
+            <option value="OFICINA ARAURE">OFICINA ARAURE</option>
+            <option value="OTRA UBICACIÓN">OTRA UBICACIÓN</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="asig_descripcion">DESCRIPCIÓN DE LO ASIGNADO / TAREA</label>
+          <textarea id="asig_descripcion" rows="3"
+            placeholder="DETALLES DEL EQUIPO, MODELO, MARCA, SERIAL O TAREA ASIGNADA..."></textarea>
+        </div>
+
+        <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
+        <div class="form-group">
+          <label for="asig_nota">NOTA / OBSERVACIÓN ADICIONAL</label>
+          <textarea id="asig_nota" rows="2" placeholder="OBSERVACIONES O DETALLES DE LA ASIGNACIÓN..."></textarea>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
       <!-- 2. SECCIÓN: TRASLADOS Y ENVÍOS             -->
       <!-- ========================================== -->
       <div id="seccion_traslados" class="card-section" style="display: none;">
@@ -191,24 +254,6 @@
         <p class="section-title">🛠️ REPORTE DIARIO DE ACTIVIDADES DE SOPORTE</p>
 
         <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="soporte_turno">TURNO / JORNADA</label>
-            <select id="soporte_turno">
-              <option value="JORNADA COMPLETA">JORNADA COMPLETA</option>
-              <option value="TURNO MAÑANA">TURNO MAÑANA</option>
-              <option value="TURNO TARDE">TURNO TARDE</option>
-              <option value="GUARDIA / FIN DE SEMANA">GUARDIA / FIN DE SEMANA</option>
-            </select>
-          </div>
-          <div class="form-group flex-1">
-            <label for="soporte_estado_sistemas">ESTADO GENERAL DE SISTEMAS / RED</label>
-            <select id="soporte_estado_sistemas">
-              <option value="100% OPERATIVO SIN NOVEDADES">🟢 100% OPERATIVO SIN NOVEDADES</option>
-              <option value="OPERATIVO CON NOVEDADES MENORES">🟡 OPERATIVO CON NOVEDADES MENORES</option>
-              <option value="EN MANTENIMIENTO PROGRAMADO">🟠 EN MANTENIMIENTO PROGRAMADO</option>
-              <option value="CON FALLA O SERVICIO DEGRADADO">🔴 CON FALLA O SERVICIO DEGRADADO</option>
-            </select>
-          </div>
         </div>
 
         <div class="form-group">
@@ -254,50 +299,33 @@
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="incidencia_area">GALPÓN / ÁREA AFECTADA</label>
-            <select id="incidencia_area">
-              <option value="">SELECCIONE GALPÓN...</option>
-              <option value="GALPÓN 1">GALPÓN 1</option>
-              <option value="GALPÓN 2">GALPÓN 2</option>
-              <option value="GALPÓN 3">GALPÓN 3</option>
-              <option value="GALPÓN 4">GALPÓN 4</option>
-              <option value="GALPÓN 5">GALPÓN 5</option>
-              <option value="GALPÓN 6">GALPÓN 6</option>
-              <option value="GALPÓN 7">GALPÓN 7</option>
-              <option value="GALPÓN 8">GALPÓN 8</option>
-              <option value="GALPÓN 9">GALPÓN 9</option>
-              <option value="GALPÓN 10">GALPÓN 10</option>
-              <option value="GALPÓN 11">GALPÓN 11</option>
-              <option value="GALPÓN 12">GALPÓN 12</option>
-              <option value="GALPÓN 13">GALPÓN 13</option>
-              <option value="GALPÓN 14">GALPÓN 14</option>
-              <option value="GALPÓN 15">GALPÓN 15</option>
-              <option value="OTRO">OTRA ÁREA</option>
-            </select>
-          </div>
-          <div class="form-group flex-1">
-            <label for="incidencia_estado">ESTADO DE LA INCIDENCIA</label>
-            <select id="incidencia_estado">
-              <option value="ABIERTA / EN PROCESO">⏳ ABIERTA / EN PROCESO</option>
-              <option value="RESUELTA / SOLUCIONADA">✅ RESUELTA / SOLUCIONADA</option>
-              <option value="EN ESPERA DE REPUESTO">🕒 EN ESPERA DE REPUESTO</option>
-              <option value="ESCALADA A TERCEROS">🚨 ESCALADA A TERCEROS / GARANTÍA</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <label for="incidencia_area">GALPÓN / ÁREA AFECTADA</label>
+          <select id="incidencia_area">
+            <option value="">SELECCIONE GALPÓN...</option>
+            <option value="GALPÓN 1">GALPÓN 1</option>
+            <option value="GALPÓN 2">GALPÓN 2</option>
+            <option value="GALPÓN 3">GALPÓN 3</option>
+            <option value="GALPÓN 4">GALPÓN 4</option>
+            <option value="GALPÓN 5">GALPÓN 5</option>
+            <option value="GALPÓN 6">GALPÓN 6</option>
+            <option value="GALPÓN 7">GALPÓN 7</option>
+            <option value="GALPÓN 8">GALPÓN 8</option>
+            <option value="GALPÓN 9">GALPÓN 9</option>
+            <option value="GALPÓN 10">GALPÓN 10</option>
+            <option value="GALPÓN 11">GALPÓN 11</option>
+            <option value="GALPÓN 12">GALPÓN 12</option>
+            <option value="GALPÓN 13">GALPÓN 13</option>
+            <option value="GALPÓN 14">GALPÓN 14</option>
+            <option value="GALPÓN 15">GALPÓN 15</option>
+            <option value="OTRO">OTRA ÁREA</option>
+          </select>
         </div>
 
         <div class="form-group">
           <label for="incidencia_descripcion">DESCRIPCIÓN DETALLADA DEL PROBLEMA</label>
           <textarea id="incidencia_descripcion" rows="3"
             placeholder="INDICAR QUÉ OCURRIÓ, MENSAJES DE ERROR, SÍNTOMAS..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="incidencia_solucion">ACCIÓN REALIZADA / SOLUCIÓN APLICADA</label>
-          <textarea id="incidencia_solucion" rows="2"
-            placeholder="INDICAR SI SE APLICÓ ALGUNA SOLUCIÓN O ACCIÓN INMEDIATA..."></textarea>
         </div>
 
         <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
@@ -375,10 +403,6 @@
               <option value="ALMACÉN GENERAL">ALMACÉN GENERAL</option>
               <option value="OTRA UBICACIÓN">OTRA UBICACIÓN</option>
             </select>
-          </div>
-          <div class="form-group flex-1">
-            <label for="inv_motivo">MOTIVO / USO</label>
-            <input type="text" id="inv_motivo" placeholder="EJ: RENOVACIÓN / COMPRA NUEVA">
           </div>
         </div>
 
@@ -481,6 +505,7 @@
 
       const secciones = {
         "CONTROL_HOJAS": { id: "seccion_hojas", texto: "📄 CONTROL DE HOJAS", clase: "badge-hojas" },
+        "ASIGNACIONES": { id: "seccion_asignaciones", texto: "📋 ASIGNACIONES", clase: "badge-asignaciones" },
         "TRASLADOS_ENVIOS": { id: "seccion_traslados", texto: "🚚 TRASLADOS Y ENVÍOS", clase: "badge-traslados" },
         "REPORTE_SOPORTE": { id: "seccion_soporte", texto: "🛠️ REPORTE SOPORTE", clase: "badge-soporte" },
         "INCIDENCIAS": { id: "seccion_incidencias", texto: "⚠️ INCIDENCIAS", clase: "badge-incidencias" },
@@ -649,6 +674,26 @@
 📦 TIPO DE FORMATO: ${tipoHoja}
 🔢 CANTIDAD: ${cant} (${unidad})`;
 
+      } else if (modulo === "ASIGNACIONES") {
+        titulo = "📋 CONTROL DE ASIGNACIÓN";
+        tags.push("#ASIGNACIONES", "#CONTROL");
+
+        const persona = getVal("asig_persona", "N/A").toUpperCase();
+        const tipoAsig = getVal("asig_tipo", "EQUIPO DE COMPUTACIÓN").toUpperCase();
+        const statusAsig = "PENDIENTE";
+        const ubicacion = getVal("asig_ubicacion", "N/A").toUpperCase();
+        const desc = getVal("asig_descripcion", "N/A").toUpperCase();
+        nota = getVal("asig_nota").toUpperCase();
+
+        cuerpo =
+          `👤 ASIGNADO A: ${persona}
+🏷️ TIPO ASIGNACIÓN: ${tipoAsig}
+📊 STATUS: ⏳ ${statusAsig}
+🏢 GALPÓN / UBICACIÓN: ${ubicacion}
+
+📦 DESCRIPCIÓN / DETALLE:
+${desc}`;
+
       } else if (modulo === "TRASLADOS_ENVIOS") {
         titulo = "🚚 REPORTE DE TRASLADO / ENVÍO";
         tags.push("#TRASLADOS", "#LOGISTICA");
@@ -691,7 +736,7 @@ ${acts}`;
         const prioridad = getVal("incidencia_prioridad", "MEDIA").toUpperCase();
         const cat = getVal("incidencia_categoria", "GENERAL").toUpperCase();
         const areaAfec = getVal("incidencia_area", "N/A").toUpperCase();
-        const estadoInc = getVal("incidencia_estado", "EN PROCESO").toUpperCase();
+        const estadoInc = "PENDIENTE";
         const desc = getVal("incidencia_descripcion", "N/A").toUpperCase();
         const solucion = getVal("incidencia_solucion", "EN DIAGNÓSTICO").toUpperCase();
         nota = getVal("incidencia_nota").toUpperCase();
@@ -700,7 +745,7 @@ ${acts}`;
           `🚨 PRIORIDAD: ${prioridad}
 📁 CATEGORÍA: ${cat}
 🏢 GALPÓN / AFECTADO: ${areaAfec}
-📊 ESTADO: ${estadoInc}
+📊 ESTADO: ⏳ ${estadoInc}
 
 🔍 DESCRIPCIÓN DEL PROBLEMA:
 ${desc}
@@ -810,6 +855,14 @@ ${tags.join(" ")}`;
         hojas_cantidad: getVal("hojas_cantidad", "1"),
         hojas_nota: getVal("hojas_nota").toUpperCase(),
 
+        // ASIGNACIONES
+        asig_persona: getVal("asig_persona", "N/A").toUpperCase(),
+        asig_tipo: getVal("asig_tipo", "EQUIPO DE COMPUTACIÓN").toUpperCase(),
+        asig_status: "PENDIENTE",
+        asig_ubicacion: getVal("asig_ubicacion", "N/A").toUpperCase(),
+        asig_descripcion: getVal("asig_descripcion", "N/A").toUpperCase(),
+        asig_nota: getVal("asig_nota").toUpperCase(),
+
         // TRASLADOS Y ENVÍOS
         traslado_tipo: getVal("traslado_tipo", "TRASLADO INTERNO").toUpperCase(),
         traslado_guia: getVal("traslado_guia", "S/G").toUpperCase(),
@@ -828,7 +881,7 @@ ${tags.join(" ")}`;
         incidencia_prioridad: getVal("incidencia_prioridad", "MEDIA").toUpperCase(),
         incidencia_categoria: getVal("incidencia_categoria", "GENERAL").toUpperCase(),
         incidencia_area: getVal("incidencia_area", "N/A").toUpperCase(),
-        incidencia_estado: getVal("incidencia_estado", "EN PROCESO").toUpperCase(),
+        incidencia_estado: "PENDIENTE",
         incidencia_descripcion: getVal("incidencia_descripcion", "N/A").toUpperCase(),
         incidencia_solucion: getVal("incidencia_solucion", "EN DIAGNÓSTICO").toUpperCase(),
         incidencia_nota: getVal("incidencia_nota").toUpperCase(),
@@ -850,38 +903,78 @@ ${tags.join(" ")}`;
         }))
       };
 
+      function finalizarEnvioExitoso() {
+        status.className = "status-msg status-success";
+        status.textContent = "✅ ¡REPORTE ENVIADO CORRECTAMENTE AL GRUPO Y GOOGLE SHEET!";
+        status.style.display = "block";
+
+        fotosLista = [];
+        renderizarPreviews();
+        setFechaActual();
+        actualizarPreviewTexto();
+
+        btn.disabled = false;
+        btn.textContent = "🚀 ENVIAR REPORTE";
+
+        if (window.Telegram && window.Telegram.WebApp) {
+          setTimeout(() => {
+            window.Telegram.WebApp.close();
+          }, 2500);
+        }
+      }
+
+      function enviarPorIframeFallback(payloadData) {
+        try {
+          let iframe = document.getElementById("hidden_submit_iframe");
+          if (!iframe) {
+            iframe = document.createElement("iframe");
+            iframe.id = "hidden_submit_iframe";
+            iframe.name = "hidden_submit_iframe";
+            iframe.style.display = "none";
+            document.body.appendChild(iframe);
+          }
+
+          const formPost = document.createElement("form");
+          formPost.method = "POST";
+          formPost.action = SCRIPT_URL;
+          formPost.target = "hidden_submit_iframe";
+          formPost.style.display = "none";
+
+          const inputData = document.createElement("input");
+          inputData.type = "hidden";
+          inputData.name = "data";
+          inputData.value = JSON.stringify(payloadData);
+          formPost.appendChild(inputData);
+
+          document.body.appendChild(formPost);
+          formPost.submit();
+
+          setTimeout(() => {
+            formPost.remove();
+            finalizarEnvioExitoso();
+          }, 1800);
+        } catch (eFallback) {
+          status.className = "status-msg status-error";
+          status.textContent = "❌ ERROR AL ENVIAR REPORTE: " + (eFallback.message || "ERROR DE CONEXIÓN").toUpperCase();
+          status.style.display = "block";
+          btn.disabled = false;
+          btn.textContent = "🚀 ENVIAR REPORTE";
+        }
+      }
+
       fetch(SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
         headers: {
           "Content-Type": "text/plain;charset=utf-8"
         },
         body: JSON.stringify(payload)
       })
         .then(() => {
-          status.className = "status-msg status-success";
-          status.textContent = "✅ ¡REPORTE ENVIADO CORRECTAMENTE AL GRUPO Y GOOGLE SHEET!";
-          status.style.display = "block";
-
-          fotosLista = [];
-          renderizarPreviews();
-          setFechaActual();
-          actualizarPreviewTexto();
-
-          if (window.Telegram && window.Telegram.WebApp) {
-            setTimeout(() => {
-              window.Telegram.WebApp.close();
-            }, 2500);
-          }
+          finalizarEnvioExitoso();
         })
         .catch((err) => {
-          status.className = "status-msg status-error";
-          status.textContent = "❌ ERROR AL ENVIAR REPORTE: " + err.message.toUpperCase();
-          status.style.display = "block";
-        })
-        .finally(() => {
-          btn.disabled = false;
-          btn.textContent = "🚀 ENVIAR REPORTE";
+          console.warn("Fetch directo no completado (posible bloqueo CORS o file://), usando respaldo de envío:", err);
+          enviarPorIframeFallback(payload);
         });
     });
   </script>
