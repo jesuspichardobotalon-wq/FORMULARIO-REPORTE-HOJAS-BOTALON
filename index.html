@@ -147,49 +147,6 @@
       <div id="seccion_asignaciones" class="card-section" style="display: none;">
         <p class="section-title">📋 ASIGNACIONES (EQUIPOS / TAREAS)</p>
 
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="asig_persona">ASIGNADO A / RECEPTOR</label>
-            <input type="text" id="asig_persona" placeholder="NOMBRE DE LA PERSONA O ÁREA">
-          </div>
-          <div class="form-group flex-1">
-            <label for="asig_tipo">TIPO DE ASIGNACIÓN</label>
-            <select id="asig_tipo">
-              <option value="EQUIPO DE COMPUTACIÓN">EQUIPO DE COMPUTACIÓN / LAPTOP</option>
-              <option value="TELEFONÍA / RADIO">TELEFONÍA / RADIO</option>
-              <option value="HERRAMIENTA / UTILLAJE">HERRAMIENTA / UTILLAJE</option>
-              <option value="MATERIAL / INSUMO">MATERIAL / INSUMO</option>
-              <option value="VEHÍCULO / MAQUINARIA">VEHÍCULO / MAQUINARIA</option>
-              <option value="ACTIVIDAD / TAREA">ACTIVIDAD / TAREA</option>
-              <option value="OTRA ASIGNACIÓN">OTRA ASIGNACIÓN</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="asig_ubicacion">GALPÓN / DESTINO</label>
-          <select id="asig_ubicacion">
-            <option value="">SELECCIONE GALPÓN...</option>
-            <option value="GALPÓN 1">GALPÓN 1</option>
-            <option value="GALPÓN 2">GALPÓN 2</option>
-            <option value="GALPÓN 3">GALPÓN 3</option>
-            <option value="GALPÓN 4">GALPÓN 4</option>
-            <option value="GALPÓN 5">GALPÓN 5</option>
-            <option value="GALPÓN 6">GALPÓN 6</option>
-            <option value="GALPÓN 7">GALPÓN 7</option>
-            <option value="GALPÓN 8">GALPÓN 8</option>
-            <option value="GALPÓN 9">GALPÓN 9</option>
-            <option value="GALPÓN 10">GALPÓN 10</option>
-            <option value="GALPÓN 11">GALPÓN 11</option>
-            <option value="GALPÓN 12">GALPÓN 12</option>
-            <option value="GALPÓN 13">GALPÓN 13</option>
-            <option value="GALPÓN 14">GALPÓN 14</option>
-            <option value="GALPÓN 15">GALPÓN 15</option>
-            <option value="OFICINA ARAURE">OFICINA ARAURE</option>
-            <option value="OTRA UBICACIÓN">OTRA UBICACIÓN</option>
-          </select>
-        </div>
-
         <div class="form-group">
           <label for="asig_descripcion">DESCRIPCIÓN DE LA ASIGNACIÓN / TAREA</label>
           <textarea id="asig_descripcion" rows="3"
@@ -199,8 +156,7 @@
         <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
         <div class="form-group">
           <label for="asig_nota">NOTA / OBSERVACIÓN ADICIONAL</label>
-          <textarea id="asig_nota" rows="2"
-            placeholder="OBSERVACIONES O DETALLES DE LA ASIGNACIÓN..."></textarea>
+          <textarea id="asig_nota" rows="2" placeholder="OBSERVACIONES O DETALLES DE LA ASIGNACIÓN..."></textarea>
         </div>
       </div>
 
@@ -350,7 +306,8 @@
             <button type="button" class="btn-photo btn-camera" onclick="document.getElementById('cameraInput').click()">
               📸 TOMAR FOTO
             </button>
-            <button type="button" class="btn-photo btn-gallery" onclick="document.getElementById('galleryInput').click()">
+            <button type="button" class="btn-photo btn-gallery"
+              onclick="document.getElementById('galleryInput').click()">
               🖼️ BUSCAR EN GALERÍA
             </button>
           </div>
