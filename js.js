@@ -61,6 +61,15 @@ var CONFIG_DESTINOS = {
 // =============================================================================
 
 function doGet(e) {
+  if (e && e.parameter && e.parameter.action === "crear_hojas") {
+    crearEstructuraCompletaDeGoogleSheets();
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "exito",
+      mensaje: "Estructura de todas las pestañas creada con éxito en Google Sheets.",
+      fecha: new Date().toISOString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+
   return ContentService.createTextOutput(JSON.stringify({
     status: "activo",
     sistema: "EL BOTALÓN - Servidor de Reportes",
@@ -615,6 +624,11 @@ function crearEstructuraCompletaDeGoogleSheets() {
       headers: ["MARCA TEMPORAL", "FECHA/HORA REPORTE", "REGISTRADO POR", "SEDE", "GALPÓN / DESTINO", "TIPO DE HOJA", "UNIDAD", "CANTIDAD", "NOTA / DESCRIPCIÓN", "FOTOS DRIVE"]
     },
     {
+      nombre: "ASIGNACIONES",
+      color: "#d97706",
+      headers: ["MARCA TEMPORAL", "FECHA/HORA REPORTE", "REGISTRADO POR", "SEDE", "ASIGNADO A", "TIPO ASIGNACIÓN", "STATUS", "GALPÓN / UBICACIÓN", "DESCRIPCIÓN", "NOTA / OBSERVACIÓN", "FOTOS DRIVE"]
+    },
+    {
       nombre: "TRASLADOS Y ENVÍOS",
       color: "#0891b2",
       headers: ["MARCA TEMPORAL", "FECHA/HORA REPORTE", "REGISTRADO POR", "SEDE", "TIPO MOVIMIENTO", "N° GUÍA/CONTROL", "ORIGEN", "DESTINO", "DESCRIPCIÓN ARTÍCULOS", "NOTA / OBSERVACIÓN", "FOTOS DRIVE"]
@@ -691,9 +705,15 @@ function crearEstructuraCompletaDeGoogleSheets() {
     sheetDash.getRange("A20").setValue("TOTAL JORNADAS REGISTRADAS:");
     sheetDash.getRange("B20").setFormula("=COUNTA('SOPORTE DIARIO'!A2:A)");
 
+    sheetDash.getRange("A22:B22").merge().setValue("📋 ASIGNACIONES (EQUIPOS / TAREAS)").setBackground("#d97706").setFontColor("#ffffff").setFontWeight("bold");
+    sheetDash.getRange("A23").setValue("ASIGNACIONES PENDIENTES:");
+    sheetDash.getRange("B23").setFormula("=COUNTIF('ASIGNACIONES'!G2:G, \"*PENDIENTE*\")");
+    sheetDash.getRange("A24").setValue("TOTAL ASIGNACIONES REGISTRADAS:");
+    sheetDash.getRange("B24").setFormula("=COUNTA('ASIGNACIONES'!A2:A)");
+
     sheetDash.setColumnWidth(1, 320);
     sheetDash.setColumnWidth(2, 120);
-    sheetDash.getRange("B4:B20").setFontWeight("bold").setHorizontalAlignment("center");
+    sheetDash.getRange("B4:B24").setFontWeight("bold").setHorizontalAlignment("center");
   }
 
   Logger.log("✅ TODAS LAS PESTAÑAS Y EL DASHBOARD HAN SIDO CREADOS CON ÉXITO EN TU GOOGLE SHEETS: " + ss.getUrl());
