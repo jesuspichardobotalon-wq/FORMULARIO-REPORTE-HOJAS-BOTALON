@@ -279,6 +279,15 @@ textarea {
   flex-direction: column;
 }
 
+.photo-btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.photo-btn-group .btn-photo {
+  flex: 1;
+}
+
 .btn-photo {
   background-color: #4b5563;
   color: white;
@@ -292,11 +301,33 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .btn-photo:hover {
   background-color: #374151;
+}
+
+.btn-camera {
+  background-color: #059669;
+}
+
+.btn-camera:hover {
+  background-color: #047857;
+}
+
+.btn-gallery {
+  background-color: #2563eb;
+}
+
+.btn-gallery:hover {
+  background-color: #1d4ed8;
+}
+
+@media (max-width: 480px) {
+  .photo-btn-group {
+    flex-direction: column;
+  }
 }
 
 .photo-preview-grid {
