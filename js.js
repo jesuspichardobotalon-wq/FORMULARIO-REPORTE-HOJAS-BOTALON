@@ -204,22 +204,27 @@ function buildMessage(data, tipo) {
     cuerpo =
       "📋 <b>TIPO MOVIMIENTO:</b> " + escapeHtml(toUpperSafe(data.traslado_tipo || "N/A")) + "\n" +
       "🏷️ <b>N° GUÍA/CONTROL:</b> " + escapeHtml(toUpperSafe(data.traslado_guia || "S/G")) + "\n" +
-      "📍 <b>ORIGEN:</b> " + escapeHtml(toUpperSafe(data.traslado_origen || "N/A")) + "\n" +
-      "🎯 <b>DESTINO:</b> " + escapeHtml(toUpperSafe(data.traslado_destino || "N/A")) + "\n" +
+      (data.traslado_origen && data.traslado_origen !== "N/A" ? "📍 <b>ORIGEN:</b> " + escapeHtml(toUpperSafe(data.traslado_origen)) + "\n" : "") +
+      (data.traslado_destino && data.traslado_destino !== "N/A" ? "🎯 <b>DESTINO:</b> " + escapeHtml(toUpperSafe(data.traslado_destino)) + "\n" : "") +
       "📦 <b>DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.traslado_descripcion || "N/A"));
 
     if (data.traslado_nota) {
-      notaModulo = "\n\n📝 <b>NOTA / DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.traslado_nota));
+      notaModulo = "\n\n📝 <b>NOTA / OBSERVACIÓN:</b>\n" + escapeHtml(toUpperSafe(data.traslado_nota));
     }
 
   } else if (tipo === "REPORTE_SOPORTE") {
     titulo = "🛠️ <b>[REPORTE DIARIO DE ACTIVIDADES DE SOPORTE]</b>";
     tags += " #SOPORTE_TECNICO #ACTIVIDADES_DIARIAS";
 
-    cuerpo =
-      "⏰ <b>TURNO:</b> " + escapeHtml(toUpperSafe(data.soporte_turno || "N/A")) + "\n" +
-      "📡 <b>ESTADO DE SISTEMAS:</b> " + escapeHtml(toUpperSafe(data.soporte_estado_sistemas || "N/A")) + "\n\n" +
-      "📋 <b>ACTIVIDADES REALIZADAS:</b>\n" + escapeHtml(toUpperSafe(data.soporte_actividades || "N/A"));
+    var detalleSoporte = "";
+    if (data.soporte_turno && data.soporte_turno !== "N/A" && data.soporte_turno !== "JORNADA COMPLETA") {
+      detalleSoporte += "⏰ <b>TURNO:</b> " + escapeHtml(toUpperSafe(data.soporte_turno)) + "\n";
+    }
+    if (data.soporte_estado_sistemas && data.soporte_estado_sistemas !== "N/A" && data.soporte_estado_sistemas !== "100% OPERATIVO") {
+      detalleSoporte += "📡 <b>ESTADO DE SISTEMAS:</b> " + escapeHtml(toUpperSafe(data.soporte_estado_sistemas)) + "\n\n";
+    }
+
+    cuerpo = detalleSoporte + "📋 <b>ACTIVIDADES REALIZADAS:</b>\n" + escapeHtml(toUpperSafe(data.soporte_actividades || "N/A"));
 
     if (data.soporte_nota) {
       notaModulo = "\n\n📝 <b>NOTA / DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.soporte_nota));
@@ -229,29 +234,49 @@ function buildMessage(data, tipo) {
     titulo = "⚠️ <b>[REPORTE DE INCIDENCIA / AVERÍA]</b>";
     tags += " #INCIDENCIAS #SOPORTE";
 
+    var detalleInc = "";
+    if (data.incidencia_categoria && data.incidencia_categoria !== "N/A" && data.incidencia_categoria !== "GENERAL") {
+      detalleInc += "📁 <b>CATEGORÍA:</b> " + escapeHtml(toUpperSafe(data.incidencia_categoria)) + "\n";
+    }
+
     cuerpo =
-      "🚨 <b>PRIORIDAD:</b> " + escapeHtml(toUpperSafe(data.incidencia_prioridad || "N/A")) + "\n" +
-      "📁 <b>CATEGORÍA:</b> " + escapeHtml(toUpperSafe(data.incidencia_categoria || "N/A")) + "\n" +
+      "🚨 <b>PRIORIDAD:</b> " + escapeHtml(toUpperSafe(data.incidencia_prioridad || "MEDIA")) + "\n" +
+      detalleInc +
       "🏢 <b>GALPÓN / AFECTADO:</b> " + escapeHtml(toUpperSafe(data.incidencia_area || "N/A")) + "\n" +
       "📊 <b>ESTADO:</b> ⏳ " + escapeHtml(toUpperSafe(data.incidencia_estado || "PENDIENTE")) + "\n\n" +
-      "🔍 <b>DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_descripcion || "N/A")) + "\n\n" +
-      "🔧 <b>ACCIÓN / SOLUCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_solucion || "EN DIAGNÓSTICO"));
+      "🔍 <b>DESCRIPCIÓN DEL PROBLEMA:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_descripcion || "N/A"));
+
+    if (data.incidencia_solucion && data.incidencia_solucion !== "N/A" && data.incidencia_solucion !== "EN DIAGNÓSTICO") {
+      cuerpo += "\n\n🔧 <b>ACCIÓN / SOLUCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_solucion));
+    }
 
     if (data.incidencia_nota) {
-      notaModulo = "\n\n📝 <b>NOTA / DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_nota));
+      notaModulo = "\n\n📝 <b>NOTA / OBSERVACIÓN:</b>\n" + escapeHtml(toUpperSafe(data.incidencia_nota));
     }
 
   } else if (tipo === "INVENTARIO") {
     titulo = "📦 <b>[MOVIMIENTO DE INVENTARIO]</b>";
     tags += " #INVENTARIO #STOCK";
 
-    cuerpo =
-      "🔄 <b>TIPO MOVIMIENTO:</b> " + escapeHtml(toUpperSafe(data.inv_tipo_mov || "N/A")) + "\n" +
-      "📂 <b>CATEGORÍA:</b> " + escapeHtml(toUpperSafe(data.inv_categoria || "N/A")) + "\n" +
-      "🏷️ <b>ARTÍCULO:</b> " + escapeHtml(toUpperSafe(data.inv_articulo || "N/A")) + "\n" +
-      "🔢 <b>CANTIDAD:</b> " + escapeHtml(toUpperSafe(data.inv_cantidad || "0")) + "\n" +
-      "📍 <b>UBICACIÓN / GALPÓN:</b> " + escapeHtml(toUpperSafe(data.inv_ubicacion || "N/A")) + "\n" +
-      "📝 <b>MOTIVO:</b> " + escapeHtml(toUpperSafe(data.inv_motivo || "N/A"));
+    var lineasInv = [];
+    if (data.inv_categoria && data.inv_categoria !== "N/A" && data.inv_categoria !== "VARIOS") {
+      lineasInv.push("📂 <b>CATEGORÍA:</b> " + escapeHtml(toUpperSafe(data.inv_categoria)));
+    }
+    if (data.inv_articulo && data.inv_articulo !== "N/A") {
+      lineasInv.push("🏷️ <b>ARTÍCULO:</b> " + escapeHtml(toUpperSafe(data.inv_articulo)));
+    }
+    if (data.inv_cantidad && data.inv_cantidad !== "0" && data.inv_cantidad !== "1") {
+      lineasInv.push("🔢 <b>CANTIDAD:</b> " + escapeHtml(toUpperSafe(data.inv_cantidad)));
+    }
+    if (data.inv_ubicacion && data.inv_ubicacion !== "N/A") {
+      lineasInv.push("📍 <b>UBICACIÓN / GALPÓN:</b> " + escapeHtml(toUpperSafe(data.inv_ubicacion)));
+    }
+    if (data.inv_motivo && data.inv_motivo !== "N/A") {
+      lineasInv.push("📝 <b>MOTIVO:</b> " + escapeHtml(toUpperSafe(data.inv_motivo)));
+    }
+
+    cuerpo = "🔄 <b>TIPO MOVIMIENTO:</b> " + escapeHtml(toUpperSafe(data.inv_tipo_mov || "N/A")) +
+      (lineasInv.length > 0 ? "\n" + lineasInv.join("\n") : "");
 
     if (data.inv_nota) {
       notaModulo = "\n\n📝 <b>NOTA / DESCRIPCIÓN:</b>\n" + escapeHtml(toUpperSafe(data.inv_nota));
@@ -364,8 +389,8 @@ function registrarEnGoogleSheet(data, tipo, nombrePestana) {
       toUpperSafe(data.sede),
       toUpperSafe(data.traslado_tipo),
       toUpperSafe(data.traslado_guia),
-      toUpperSafe(data.traslado_origen),
-      toUpperSafe(data.traslado_destino),
+      toUpperSafe(data.traslado_origen === "N/A" ? "" : data.traslado_origen),
+      toUpperSafe(data.traslado_destino === "N/A" ? "" : data.traslado_destino),
       toUpperSafe(data.traslado_descripcion),
       toUpperSafe(data.traslado_nota),
       data.drive_url || ""
@@ -377,8 +402,8 @@ function registrarEnGoogleSheet(data, tipo, nombrePestana) {
       toUpperSafe(data.fecha),
       toUpperSafe(data.responsable),
       toUpperSafe(data.sede),
-      toUpperSafe(data.soporte_turno),
-      toUpperSafe(data.soporte_estado_sistemas),
+      toUpperSafe((data.soporte_turno === "N/A" || data.soporte_turno === "JORNADA COMPLETA") ? "" : data.soporte_turno),
+      toUpperSafe((data.soporte_estado_sistemas === "N/A" || data.soporte_estado_sistemas === "100% OPERATIVO") ? "" : data.soporte_estado_sistemas),
       toUpperSafe(data.soporte_actividades),
       toUpperSafe(data.soporte_nota),
       data.drive_url || ""
@@ -391,11 +416,11 @@ function registrarEnGoogleSheet(data, tipo, nombrePestana) {
       toUpperSafe(data.responsable),
       toUpperSafe(data.sede),
       toUpperSafe(data.incidencia_prioridad),
-      toUpperSafe(data.incidencia_categoria),
+      toUpperSafe((data.incidencia_categoria === "N/A" || data.incidencia_categoria === "GENERAL") ? "" : data.incidencia_categoria),
       toUpperSafe(data.incidencia_area),
       toUpperSafe(data.incidencia_estado || "PENDIENTE"),
       toUpperSafe(data.incidencia_descripcion),
-      toUpperSafe(data.incidencia_solucion),
+      toUpperSafe((data.incidencia_solucion === "N/A" || data.incidencia_solucion === "EN DIAGNÓSTICO") ? "" : data.incidencia_solucion),
       toUpperSafe(data.incidencia_nota),
       data.drive_url || ""
     ];
@@ -407,11 +432,11 @@ function registrarEnGoogleSheet(data, tipo, nombrePestana) {
       toUpperSafe(data.responsable),
       toUpperSafe(data.sede),
       toUpperSafe(data.inv_tipo_mov),
-      toUpperSafe(data.inv_categoria),
-      toUpperSafe(data.inv_articulo),
-      toUpperSafe(data.inv_cantidad),
-      toUpperSafe(data.inv_ubicacion),
-      toUpperSafe(data.inv_motivo),
+      toUpperSafe((data.inv_categoria === "N/A" || data.inv_categoria === "VARIOS") ? "" : data.inv_categoria),
+      toUpperSafe(data.inv_articulo === "N/A" ? "" : data.inv_articulo),
+      toUpperSafe((data.inv_cantidad === "0" || data.inv_cantidad === "1") ? "" : data.inv_cantidad),
+      toUpperSafe(data.inv_ubicacion === "N/A" ? "" : data.inv_ubicacion),
+      toUpperSafe(data.inv_motivo === "N/A" ? "" : data.inv_motivo),
       toUpperSafe(data.inv_nota),
       data.drive_url || ""
     ];

@@ -25,7 +25,6 @@
         <label for="tipo_reporte">📋 SELECCIONE EL TIPO DE REPORTE:</label>
         <select id="tipo_reporte" class="modulo-select" onchange="cambiarModulo()">
           <option value="CONTROL_HOJAS" selected>📄 CONTROL DE HOJAS DESPACHADAS</option>
-          <option value="ASIGNACIONES">📋 ASIGNACIONES (EQUIPOS / TAREAS)</option>
           <option value="TRASLADOS_ENVIOS">🚚 TRASLADOS Y ENVÍOS</option>
           <option value="REPORTE_SOPORTE">🛠️ REPORTE DIARIO DE ACTIVIDADES (SOPORTE)</option>
           <option value="INCIDENCIAS">⚠️ REPORTE DE INCIDENCIAS</option>
@@ -142,68 +141,6 @@
       </div>
 
       <!-- ========================================== -->
-      <!-- SECCIÓN: ASIGNACIONES                     -->
-      <!-- ========================================== -->
-      <div id="seccion_asignaciones" class="card-section" style="display: none;">
-        <p class="section-title">📋 ASIGNACIONES (EQUIPOS / TAREAS)</p>
-
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="asig_persona">ASIGNADO A / RECEPTOR</label>
-            <input type="text" id="asig_persona" placeholder="NOMBRE DE LA PERSONA O ÁREA">
-          </div>
-          <div class="form-group flex-1">
-            <label for="asig_tipo">TIPO DE ASIGNACIÓN</label>
-            <select id="asig_tipo">
-              <option value="EQUIPO DE COMPUTACIÓN">EQUIPO DE COMPUTACIÓN / LAPTOP</option>
-              <option value="TELEFONÍA / RADIO">TELEFONÍA / MÓVIL / RADIO</option>
-              <option value="HERRAMIENTA / UTILLAJE">HERRAMIENTA / UTILLAJE</option>
-              <option value="MATERIAL / INSUMO">MATERIAL / INSUMO</option>
-              <option value="VEHÍCULO / MAQUINARIA">VEHÍCULO / MAQUINARIA</option>
-              <option value="ACTIVIDAD / TAREA">ACTIVIDAD / TAREA ESPECÍFICA</option>
-              <option value="OTRA ASIGNACIÓN">OTRA ASIGNACIÓN</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="asig_ubicacion">GALPÓN / DESTINO</label>
-          <select id="asig_ubicacion">
-            <option value="">SELECCIONE GALPÓN...</option>
-            <option value="GALPÓN 1">GALPÓN 1</option>
-            <option value="GALPÓN 2">GALPÓN 2</option>
-            <option value="GALPÓN 3">GALPÓN 3</option>
-            <option value="GALPÓN 4">GALPÓN 4</option>
-            <option value="GALPÓN 5">GALPÓN 5</option>
-            <option value="GALPÓN 6">GALPÓN 6</option>
-            <option value="GALPÓN 7">GALPÓN 7</option>
-            <option value="GALPÓN 8">GALPÓN 8</option>
-            <option value="GALPÓN 9">GALPÓN 9</option>
-            <option value="GALPÓN 10">GALPÓN 10</option>
-            <option value="GALPÓN 11">GALPÓN 11</option>
-            <option value="GALPÓN 12">GALPÓN 12</option>
-            <option value="GALPÓN 13">GALPÓN 13</option>
-            <option value="GALPÓN 14">GALPÓN 14</option>
-            <option value="GALPÓN 15">GALPÓN 15</option>
-            <option value="OFICINA ARAURE">OFICINA ARAURE</option>
-            <option value="OTRA UBICACIÓN">OTRA UBICACIÓN</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="asig_descripcion">DESCRIPCIÓN DE LO ASIGNADO / TAREA</label>
-          <textarea id="asig_descripcion" rows="3"
-            placeholder="DETALLES DEL EQUIPO, MODELO, MARCA, SERIAL O TAREA ASIGNADA..."></textarea>
-        </div>
-
-        <!-- CAMPO DE NOTA / DESCRIPCIÓN ESPECÍFICO -->
-        <div class="form-group">
-          <label for="asig_nota">NOTA / OBSERVACIÓN ADICIONAL</label>
-          <textarea id="asig_nota" rows="2" placeholder="OBSERVACIONES O DETALLES DE LA ASIGNACIÓN..."></textarea>
-        </div>
-      </div>
-
-      <!-- ========================================== -->
       <!-- 2. SECCIÓN: TRASLADOS Y ENVÍOS             -->
       <!-- ========================================== -->
       <div id="seccion_traslados" class="card-section" style="display: none;">
@@ -221,17 +158,6 @@
           <div class="form-group flex-1">
             <label for="traslado_guia">N° GUÍA / REMISIÓN / CONTROL</label>
             <input type="text" id="traslado_guia" placeholder="EJ: GUIA-9042">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="traslado_origen">ORIGEN (GALPÓN / SEDE)</label>
-            <input type="text" id="traslado_origen" placeholder="EJ: GALPÓN 3 / ALMACÉN PRINCIPAL">
-          </div>
-          <div class="form-group flex-1">
-            <label for="traslado_destino">DESTINO (GALPÓN / SEDE)</label>
-            <input type="text" id="traslado_destino" placeholder="EJ: GALPÓN 8 / SUCURSAL CENTRO">
           </div>
         </div>
 
@@ -284,17 +210,6 @@
               <option value="MEDIA" selected>🟡 MEDIA (AFECTA PARCIALMENTE)</option>
               <option value="ALTA">🟠 ALTA (AFECTA OPERACIONES CLAVE)</option>
               <option value="CRÍTICA">🔴 CRÍTICA (SISTEMA O ÁREA DETENIDA)</option>
-            </select>
-          </div>
-          <div class="form-group flex-1">
-            <label for="incidencia_categoria">TIPO DE INCIDENCIA</label>
-            <select id="incidencia_categoria">
-              <option value="RED / INTERNET / WI-FI">RED / INTERNET / WI-FI</option>
-              <option value="COMPUTADOR / SERVIDOR / LAPTOP">COMPUTADOR / SERVIDOR / LAPTOP</option>
-              <option value="IMPRESORA / ESCÁNER">IMPRESORA / ESCÁNER</option>
-              <option value="SOFTWARE / SISTEMA / CORREO">SOFTWARE / SISTEMA / CORREO</option>
-              <option value="ELÉCTRICO / UPS / PLANTA">ELÉCTRICO / UPS / PLANTA</option>
-              <option value="OTRA INCIDENCIA">OTRA INCIDENCIA</option>
             </select>
           </div>
         </div>
@@ -350,58 +265,6 @@
               <option value="SALIDA / DESPACHO">📤 SALIDA / DESPACHO / ENTREGA</option>
               <option value="DEVOLUCIÓN / REINGRESO">🔄 DEVOLUCIÓN / REINGRESO</option>
               <option value="AJUSTE DE INVENTARIO">⚙️ AJUSTE DE INVENTARIO / CONTEO</option>
-            </select>
-          </div>
-          <div class="form-group flex-1">
-            <label for="inv_categoria">CATEGORÍA</label>
-            <select id="inv_categoria">
-              <option value="PAPELERÍA Y ÚTILES">PAPELERÍA Y ÚTILES</option>
-              <option value="EQUIPOS DE CÓMPUTO">EQUIPOS DE CÓMPUTO</option>
-              <option value="REDES Y CONECTIVIDAD">REDES Y CONECTIVIDAD</option>
-              <option value="TÓNER Y TINTAS">TÓNER Y TINTAS</option>
-              <option value="HERRAMIENTAS Y REPUESTOS">HERRAMIENTAS Y REPUESTOS</option>
-              <option value="VARIOS / OTROS">VARIOS / OTROS</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group flex-2">
-            <label for="inv_articulo">ARTÍCULO / MATERIAL / EQUIPO</label>
-            <input type="text" id="inv_articulo" placeholder="EJ: TECLADO USB LOGITECH / TÓNER HP 85A">
-          </div>
-          <div class="form-group flex-1">
-            <label for="inv_cantidad">CANTIDAD</label>
-            <div class="stepper-wrapper">
-              <button type="button" class="btn-stepper" onclick="modificarStepper('inv_cantidad', -1)">-</button>
-              <input type="number" id="inv_cantidad" value="1" min="1">
-              <button type="button" class="btn-stepper" onclick="modificarStepper('inv_cantidad', 1)">+</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="inv_ubicacion">UBICACIÓN / GALPÓN / ALMACÉN</label>
-            <select id="inv_ubicacion">
-              <option value="">SELECCIONE GALPÓN / ALMACÉN...</option>
-              <option value="GALPÓN 1">GALPÓN 1</option>
-              <option value="GALPÓN 2">GALPÓN 2</option>
-              <option value="GALPÓN 3">GALPÓN 3</option>
-              <option value="GALPÓN 4">GALPÓN 4</option>
-              <option value="GALPÓN 5">GALPÓN 5</option>
-              <option value="GALPÓN 6">GALPÓN 6</option>
-              <option value="GALPÓN 7">GALPÓN 7</option>
-              <option value="GALPÓN 8">GALPÓN 8</option>
-              <option value="GALPÓN 9">GALPÓN 9</option>
-              <option value="GALPÓN 10">GALPÓN 10</option>
-              <option value="GALPÓN 11">GALPÓN 11</option>
-              <option value="GALPÓN 12">GALPÓN 12</option>
-              <option value="GALPÓN 13">GALPÓN 13</option>
-              <option value="GALPÓN 14">GALPÓN 14</option>
-              <option value="GALPÓN 15">GALPÓN 15</option>
-              <option value="ALMACÉN GENERAL">ALMACÉN GENERAL</option>
-              <option value="OTRA UBICACIÓN">OTRA UBICACIÓN</option>
             </select>
           </div>
         </div>
